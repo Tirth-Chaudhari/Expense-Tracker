@@ -7,7 +7,7 @@ const GlobalContext=React.createContext();
 
 
 // const BASE_URL = "http://localhost:8000/api/v1/";
-const BASE_URL = "https://expense-tracker-7.onrender.com/api/v1/";
+const BASE_URL = process.env.REACT_APP_BASE_URL
 
 export const GlobalProvider=({children})=>
 {

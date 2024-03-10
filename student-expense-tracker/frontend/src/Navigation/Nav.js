@@ -60,6 +60,8 @@ const Nav = ({active,setActive,isSidebarOpenFunc})=>
     {
         const data=new FormData();
         data.append("file",image);
+        
+
         data.append("upload_preset",Upload_Preset);
         data.append("cloud_name", Cloudinary_Name);
 
