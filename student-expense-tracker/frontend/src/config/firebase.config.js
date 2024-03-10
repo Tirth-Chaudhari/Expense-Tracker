@@ -1,0 +1,30 @@
+
+
+// Import the functions you need from the SDKs you need
+import {getApp,getApps,initializeApp} from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC-Nkms-rD3LSc6VQW6Nh-4tfdAgGqHD6s",
+  authDomain: "fir-e2e78.firebaseapp.com",
+  projectId: "fir-e2e78",
+  storageBucket: "fir-e2e78.appspot.com",
+  messagingSenderId: "280880259274",
+  appId: "1:280880259274:web:ecb1c1d91ffc5b2e5c1433",
+  measurementId: "G-VL9GR9RZ7S"
+};
+// Your web app's Firebase configuration
+// const firebaseConfig = {
+//   apiKey: "AIzaSyD1iL0LIfyau9rO2MMIuJ_copeZIPlLUgI",
+//   authDomain: "fir-token-c8de4.firebaseapp.com",
+//   projectId: "fir-token-c8de4",
+//   storageBucket: "fir-token-c8de4.appspot.com",
+//   messagingSenderId: "1070004107451",
+//   appId: "1:1070004107451:web:42853283e7c638a9e5919e"
+// };
+
+// Initialize Firebase
+const app=  getApps.Length > 0 ? getApp() : initializeApp(firebaseConfig);
+
+export {app};
