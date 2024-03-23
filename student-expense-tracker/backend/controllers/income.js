@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 exports.addIncome = async (req, res) => {
     const {title, amount, category, description, date,user_id}  = req.body
-
+    
     const income = IncomeSchema({
         title,
         amount,
@@ -16,7 +16,7 @@ exports.addIncome = async (req, res) => {
     })
     try {
         //validations
-        if(!title || !category || !description || !date){
+        if(!title || !category || !date || !amount){
             return res.status(400).json({message: 'All fields are required!'})
         }
         if(amount <= 0 || !amount === 'number'){
