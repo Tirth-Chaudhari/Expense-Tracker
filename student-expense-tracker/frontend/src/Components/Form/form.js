@@ -28,6 +28,7 @@ const Form=()=>
                 position: "top-center"
               });
         }else{
+          console.log(inputState.description+"description");
         addIncome(inputState);
         setInput(
         {title:'',
@@ -39,7 +40,7 @@ const Form=()=>
        toast.success("SuccessFully Added Income", {
         position: "top-center"
       });
-    }
+      }
     }
 
     const handleInput=(event)=>
@@ -60,7 +61,7 @@ const Form=()=>
                                 type="text"
                                 value={inputState.title}
                                 name="title"
-                                placeholder="Salary Title"
+                                placeholder="Title"
                                 onChange={handleInput}
                                 ></input>
                
@@ -68,7 +69,7 @@ const Form=()=>
                                 type="number"
                                 value={inputState.amount}
                                 name="amount"
-                                placeholder="Salary Amount"
+                                placeholder="Amount"
                                 onChange={(handleInput)}></input>
                    
                             <DatePicker id="date" 

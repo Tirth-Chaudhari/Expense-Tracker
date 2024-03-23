@@ -62,7 +62,7 @@ const App=()=>
           
             <Navigation active={active} setActive={setActive} isSidebarOpenFunc={isSidebarOpenFunc}/>
                  
-            <main >  
+            <main>  
                 <div className='logo1 mb-6 flex flex-col items-center z-10 sticky top-0  justify-center rounded-2xl h-32 shadow-md'>
                     <div><h3 className='font-bold'>My Money</h3></div>
                     {active==2 ? <TabLayout setActive={setActiveTab}

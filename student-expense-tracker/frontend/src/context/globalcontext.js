@@ -6,8 +6,7 @@ const GlobalContext=React.createContext();
 
 
 
-// const BASE_URL = "http://localhost:8000/api/v1/";
-const BASE_URL = process.env.REACT_APP_BASE_URL
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export const GlobalProvider=({children})=>
 {
@@ -520,10 +519,10 @@ export const GlobalProvider=({children})=>
 
     const addUser=async(user)=>
     {
-        
+        console.log(user);
         localStorage.setItem('name',user.name);
         localStorage.setItem('email',user.email);
-        console.log("enter1");
+     
          await axios.post(`${BASE_URL}add-user`, user).then((response)=>
         {
             if(response){

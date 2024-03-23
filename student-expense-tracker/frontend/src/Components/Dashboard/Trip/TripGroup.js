@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Delete, comment, edit, email, friends, note, rupee, user } from "../../../utils/Icon";
 import { useGlobalContext } from "../../../context/globalcontext";
-import { Card, Typography } from "@material-tailwind/react";
+import { Card, Checkbox, Typography, timeline } from "@material-tailwind/react";
 import moment from "moment";
 import {useReactToPrint} from "react-to-print";
 const TripsGroup=({TripId,setActive})=>
@@ -20,7 +20,26 @@ const TripsGroup=({TripId,setActive})=>
                         const [_id,setid]=useState('');
                         const {deleteTripData,updateTripData,getTripData,TripInfo}=useGlobalContext();
                         const [allsettlements,setsettlements]=useState();
+                        const [mode,setMode]=useState("Equally");
+                        const [checkedCount, setCheckedCount] = useState(TripId.TripMember.length);
+                        const [total,setTotal]=useState(0);
+                        const [equallyTitle,setTitle]=useState('');
+                        const [selectedMembers, setSelectedMembers] = useState(Array.from({ length: TripId.TripMember.length }, () => true));
 
+                     const handleCheckboxChange = (index, isChecked) => {
+                        const newCheckedCount = isChecked ? checkedCount + 1 : checkedCount - 1;
+                        setCheckedCount(newCheckedCount);
+                        setSelectedMembers(prevSelectedMembers => {
+                           const newSelectedMembers = [...prevSelectedMembers];
+                           newSelectedMembers[index] = isChecked;
+                           return newSelectedMembers;
+                       });
+                      
+
+                        
+                     };
+
+                        
                   const componentPDF=useRef();
                   const generatePDF=useReactToPrint({
                      content:()=>componentPDF.current,
@@ -28,6 +47,8 @@ const TripsGroup=({TripId,setActive})=>
 
 
                   })
+
+                 
             const generateSettlementsTable=(tripData, currentUser) =>{
                const settlements = {};
                        
@@ -111,6 +132,13 @@ const TripsGroup=({TripId,setActive})=>
                                 individualAmounts: [],
                                 paidBy:{}
                         });
+                        const [expenseDetails1,  setExpenseDetails1] = useState({
+                           _id:TripId._id,
+                           title: '',
+                           totalAmount: 0,
+                           individualAmounts: [],
+                           paidBy:{}
+                   });
 
                         const handleExpenseChange = (event, index, userId, name, email) => {
                                 const { name: inputName, value } = event.target;
@@ -148,8 +176,48 @@ const TripsGroup=({TripId,setActive})=>
                         }
                         // Update the expenseDetails state variable
                         };
-                        const handleSaveExpense = () => {
-                                if(expenseDetails.title && expenseDetails.totalAmount!==0)
+                        const handleSaveExpense = () => 
+                        {
+                           if(mode==="Equally")
+                           {
+                              if(equallyTitle.trim()==='' || total<=0)
+                              {
+                                 toast.info('Enter title and Amount',
+                                 {
+                                       position:"top-center"
+                                 })
+                              }
+                              else
+                              {
+                                 const selectedMembersData = TripId.TripMember.filter((member, index) => selectedMembers[index]);
+                                 const divideAmount=(total/checkedCount).toFixed(2);
+                                 // Create an array containing the required data for selected members
+                                 const selectedMembersArray = selectedMembersData.map(member => {
+                                     return {
+                                         user_id: member.user_id,
+                                         name: member.name,
+                                         email: member.email,
+                                         amount:divideAmount // Assuming you have amount property in TripId.TripMember
+                                     };
+                                 });
+                               expenseDetails1.individualAmounts=selectedMembersArray;
+                               expenseDetails1.title=equallyTitle; 
+                               const paidTotal={
+                                 user_id:localStorage.getItem("userid"),name:localStorage.getItem("name"),email:localStorage.getItem("email"),
+                                 total:total
+                                 }
+                               expenseDetails1.paidBy=paidTotal
+                               addTripData(expenseDetails1);
+                               toast.success('Successfully Added Group Data', {
+                                 position: "top-center"
+                               });
+                               setTitle('')
+                               setTotal(0);
+                              }
+                           }
+                           else
+                           {
+                                if(expenseDetails.title.trim()!='' && expenseDetails.totalAmount!==0)
                                 {
                                     const filteredIndividualAmounts = expenseDetails.individualAmounts.filter(amount => 
                                        amount && typeof amount === 'object' && Object.keys(amount).length !== 0
@@ -176,15 +244,15 @@ const TripsGroup=({TripId,setActive})=>
                      }
                         else
                             {
-                                if(expenseDetails.title==='' && expenseDetails.totalAmount===0)
+                                if(expenseDetails.title.trim()==='' && expenseDetails.totalAmount===0)
                                 {
                                      toast.info('Enter title and Amount',
-                                {
-                                     position:"top-center"
-                                })
-                        }
-                        else if(expenseDetails.title==='')
-                        {
+                                    {
+                                          position:"top-center"
+                                    })
+                                 }
+                               else if(expenseDetails.title.trim()==='')
+                              {
                                 toast.info('Enter title',
                                 {
                                     position:"top-center"
@@ -196,8 +264,9 @@ const TripsGroup=({TripId,setActive})=>
                                 {
                                 position:"top-center"
                                 })  
-                        }
-                        }
+                              }
+                           }
+                           }
                         };
 
                         const [current,setCurrent]=useState('GroupData');
@@ -210,6 +279,10 @@ const TripsGroup=({TripId,setActive})=>
                            
                             if (e.target.value=== "Bill Splitter") {
                               generateSettlementsTable(TripId.TripData, { user_id: localStorage.getItem("userid") });
+                            }
+                            if(e.target.value=='Add Expense')
+                            {
+                                 setMode("Equally")
                             }
                         }
                         const change=()=>
@@ -438,8 +511,8 @@ return(<>
                <input
                   type="text"
                   name="title"
-                  value={expenseDetails.title}
-                  onChange={handleExpenseChange}
+                  value={mode=="Unequally"? expenseDetails.title:equallyTitle}
+                  onChange={mode=="Unequally"? handleExpenseChange :(e)=>setTitle(e.target.value)}
                   className="block text-xl w-full mt-1 py-2 px-3 border border-blue-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-400"
                   />
             </Typography>
@@ -457,15 +530,15 @@ return(<>
                      />
                </div>
                <div>
-                  <label htmlFor="amountPaid" className="block text-sm font-medium text-blue-gray-700">
+                  <label htmlFor="amountPaid" className="block text-sm font-medium text-blue-gray-700" onChange={(e)=>setTotal(e.target.value)}>
                       How Much?
                   </label>
                   <input
-                     disabled={true}
-                     type="number"
+                     disabled={mode=="Unequally"}
+                     type="number"   
                      name="totalAmount"
-                     value={expenseDetails.totalAmount}
-                     onChange={handleExpenseChange}
+                     value={mode=="Unequally"?expenseDetails.totalAmount:total}
+                     onChange={mode=="Unequally"? handleExpenseChange:(e)=>setTotal(e.target.value)}
                      className="block w-full mt-1 py-2 px-3 border border-blue-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-400"
                      />
                </div>
@@ -473,7 +546,21 @@ return(<>
          </div>
       </div>
    </div>
+    <div>
+      <select className="p-2 w-40  m-8 mb-2 border border-gray-300 rounded-md "
+            onChange={(e)=>{setMode(e.target.value)}}
+         >
+         <option value="Equally">Equally</option>
+         <option value="Unequally">Unequally</option>
+      </select>
+      </div>
+
    <div className="">
+      {mode === 'Equally' && (
+         <p className='flex justify-center text-lg'>
+               {((total / checkedCount)).toFixed(2)}/person ({checkedCount} person)
+         </p>
+      )}
       <table className="w-full lg:w-auto text-left border-collapse mx-auto lg:mx-0">
          <thead>
             <tr>
@@ -486,6 +573,7 @@ return(<>
                ))}
             </tr>
          </thead>
+       {mode=="Unequally" &&
          <tbody>
             {TripId.TripMember.map((member, index) => {
             const isLast = index === TripId.TripMember.length - 1;
@@ -506,8 +594,7 @@ return(<>
                   <div className="">
                      <input
                      key={index}
-                     type="text"
-                     inputMode="numeric"
+                     type="number"
                      name={`amount${index}`} 
                      value={expenseDetails.individualAmounts[index]?.amount || ''} // Use value from state variable
                      onChange={event => handleExpenseChange(event, index, member.user_id, member.name, member.user_id)} // Pass index to identify the corresponding member
@@ -519,6 +606,40 @@ return(<>
             );
             })}
          </tbody>
+      }
+      {
+         mode=="Equally" &&
+         <tbody>
+            {TripId.TripMember.map((member, index) => {
+            const isLast = index === TripId.TripMember.length - 1;
+            const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
+            return (
+            <tr key={index}>
+               <td className={classes}>
+                  <Typography variant="large" color="blue-gray" className="font-normal text-xl">
+                     {member.name}
+                  </Typography>
+               </td>
+               <td className={classes}>
+                  <Typography variant="large" color="blue-gray" className="font-normal text-xl">
+                     {member.email}
+                  </Typography>
+               </td>
+               <td className={classes}>
+                <input
+                     type="checkbox"
+                     className="inline-block w-6 h-6 ml-4 bg-white border border-gray-300 rounded-md cursor-pointer"
+                     id={`checkbox-${index}`} 
+                     checked={selectedMembers[index]}
+                     onChange={(e) => handleCheckboxChange(index, e.target.checked)}
+                    
+                />
+            </td>
+            </tr>
+            );
+            })}
+         </tbody>
+      }
       </table>
    </div>
    <button
@@ -561,7 +682,7 @@ return(<>
                   
                   <tr className='border-b border-white'  >
                   <td className="px-4 py-2 whitespace-nowrap text-xl">{name.slice(0,28)}</td>
-                     <td className="px-4 py-2 whitespace-nowrap text-xl">{expenses}
+                     <td className="px-4 py-2 whitespace-nowrap text-xl">{expenses.toFixed(2)}
                                  {
                                     expenseArray.length!=1 && 
                                     <select className="ml-4 md:w-1/2 appearance-none bg-white border border-gray-300 text-gray-700 px-1 rounded leading-tight focus:outline-none focus:shadow-outline">
@@ -571,7 +692,7 @@ return(<>
                                      </select>
                                  }
                      </td>
-                     <td className="relative px-6 py-4 whitespace-nowrap text-xl">{income}      
+                     <td className="relative px-6 py-4 whitespace-nowrap text-xl">{income.toFixed(2)}      
                                  {
                                     incomeArray.length!=1 && 
                                     <select className="ml-4 md:w-1/2 appearance-none bg-white border border-gray-300 text-gray-700  px-1 rounded leading-tight focus:outline-none focus:shadow-outline">
@@ -581,7 +702,7 @@ return(<>
                                      </select>
                                  }
                      </td>
-                     <td className="px-4 py-2 whitespace-nowrap text-xl">{expenses-income}</td>
+                     <td className="px-4 py-2 whitespace-nowrap text-xl">{(expenses-income).toFixed(2)}</td>
 
                   
                   </tr> 

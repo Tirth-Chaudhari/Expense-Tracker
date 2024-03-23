@@ -1,7 +1,7 @@
 
 
 import React,{ useEffect, useReducer, useState } from "react";
-import {Router,Routes} from "react-router-dom";
+import {Router,Routes, useInRouterContext} from "react-router-dom";
 import {GoogleAuthProvider,signInWithPopup,getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword} from "firebase/auth";
 import  "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 // import "firebase/auth";
@@ -37,7 +37,9 @@ const AppLogin=()=>
                 {
                         if(useCred._tokenResponse.emailVerified)
                         {
-                            // setAuth(true);
+                            localStorage.setItem("photoImage",useCred.user.photoURL)
+                           
+                            
                             const user=
                             {
                                 name:useCred._tokenResponse.displayName,

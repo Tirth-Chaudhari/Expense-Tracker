@@ -160,15 +160,7 @@ const Group=({setActive,setxid})=>
                              <ServerErrorGlobal/>
                     </div>
                 )}
-                        <div className='flex items-center mt-8 lg:mt-8  hover:bg-gray-100 cursor-pointer border-gray-300 border-b ml-2' onClick={()=>{ 
-                            
-                            change()}} >
-                            <div className='w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center mr-4' >{user}</div>
-                            <div className='flex-grow'>
-                                <div className='text-lg font-semibold'>for mobile users</div>
-                                <div className='text-gray-500'>Android5454@gmail</div>
-                            </div>
-                        </div>
+                      
                             
                 
                 <ToastContainer />

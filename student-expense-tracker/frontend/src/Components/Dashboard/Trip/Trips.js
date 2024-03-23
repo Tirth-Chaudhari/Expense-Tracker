@@ -3,6 +3,7 @@ import { email, groups, user } from "../../../utils/Icon";
 import { useEffect, useState } from "react";
 import { useGlobalContext } from "../../../context/globalcontext";
 import ServerErrorGlobal from '../../ServerErrorGlobal';
+import { ToastContainer, toast } from 'react-toastify';
 import './Trip.css'
 const Trips=({setActive,setTripId})=>
 {
@@ -29,8 +30,17 @@ const Trips=({setActive,setTripId})=>
     },[])
     const addTrip1=()=>
     {
+            if(!TripName || TripName.trim() === '' || !localStorage.getItem("userid"))
+            {
+                toast.info("Please Enter Valid Group Name", {
+                    position: "top-center"
+                  });
+            }
+            else
+            {
             AddTrip(TripName);
             setTripName('');
+            }
             
     }
     const changeGroup=(trip)=>
@@ -43,11 +53,12 @@ const Trips=({setActive,setTripId})=>
     }
 return(
     <>
+    <ToastContainer/>
     <div className="overflow-auto TripBottom">
     <div className="overflow-auto ">
         <div class='max-w-md w-full mx-auto bg-white rounded-lg shadow-md overflow-hidden'>
         <div class='flex items-center border-b border-gray-200 py-2 px-4'>
-            <input class='w-full bg-gray-100 focus:outline-none focus:bg-white border-transparent focus:border-gray-300 rounded-lg py-2 px-4' value={TripName} type='text' placeholder='Group Name' onChange={(e)=>{ setTripName(e.target.value) }} />
+            <input class='w-full bg-gray-100 focus:outline-none focus:bg-white border-transparent focus:border-gray-300 rounded-lg py-2 px-4' value={TripName} type='text' placeholder='Create Group ' onChange={(e)=>{ setTripName(e.target.value) }} />
             <button class='flex ml-4  bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded'
             onClick={addTrip1}><div className='mr-1'>{groups}</div><div>{email}</div></button>
         </div>

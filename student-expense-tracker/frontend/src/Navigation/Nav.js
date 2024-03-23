@@ -19,8 +19,8 @@ const Nav = ({active,setActive,isSidebarOpenFunc})=>
       isSidebarOpenFunc();
     };
 
-    const [profileImage, setProfileImage] = useState(user_logo); // Default image path
-    const [userName, setUserName] = useState("John Doe");
+    const [profileImage, setProfileImage] = useState(localStorage.getItem("photoImage")); // Default image path
+    const [userName, setUserName] = useState(localStorage.getItem("name"));
     const [isEditingName, setIsEditingName] = useState(false);
     const {setUserImage,setUserProfileName,Username,ImageUrl}=useGlobalContext();
 
@@ -29,11 +29,11 @@ const Nav = ({active,setActive,isSidebarOpenFunc})=>
         const  Username=localStorage.getItem("name1");
         console.log(ImageUrl);
         console.log(Username);
-        if(ImageUrl)
+        if(ImageUrl!='undefined')
         {
-        setProfileImage(ImageUrl);
+         setProfileImage(ImageUrl);
         }
-        if(Username)
+        if(Username!='undefined')
         {
         setUserName(Username);
         }
@@ -60,8 +60,6 @@ const Nav = ({active,setActive,isSidebarOpenFunc})=>
     {
         const data=new FormData();
         data.append("file",image);
-        
-
         data.append("upload_preset",Upload_Preset);
         data.append("cloud_name", Cloudinary_Name);
 

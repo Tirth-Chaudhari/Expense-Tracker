@@ -57,7 +57,7 @@ const ExpenseForm=()=>
                                 type="text"
                                 value={inputState.title}
                                 name="title"
-                                placeholder="Salary Title"
+                                placeholder="Title"
                                 className="shadow-md"
                                 onChange={handleInput}
                                 ></input>
@@ -67,7 +67,7 @@ const ExpenseForm=()=>
                                 value={inputState.amount}
                                 name="amount"
                                 className="shadow-md"
-                                placeholder="Salary Amount"
+                                placeholder="Amount"
                                 onChange={(handleInput)}></input>
                    
                             <DatePicker id="date" 
