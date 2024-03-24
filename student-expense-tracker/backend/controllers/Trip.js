@@ -130,7 +130,7 @@ exports.getTrip = async (req, res) => {
 exports.deleteTripData=async(req,res)=>
 {
     const {id,_id}=req.body;
-    console.log(_id+'at');
+    
     const ObjectId = mongoose.Types.ObjectId(id);
     const ObjectId1 = mongoose.Types.ObjectId(_id);
     try {
@@ -192,5 +192,20 @@ exports.getTripData=async(req,res)=>
         return res.status(500).json({ error: 'Server Error' });
     }
 
+
+}
+exports.deleteTripGroup= async (req, res) => {
+    const {id}=req.body;
+    
+    const ObjectId = mongoose.Types.ObjectId(id);
+    
+    try {
+        // Delete the TripData record using its _id
+        const deleteTrip = await TripSchema.deleteOne({_id:ObjectId});
+        
+        res.status(200).json({ message: 'TripData deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to delete TripData', error: error.message });
+    }
 
 }

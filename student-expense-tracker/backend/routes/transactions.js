@@ -5,7 +5,7 @@ const { addGroup,getGroups, deleteGroup } = require('../controllers/Group');
 const { addGroupIncome, getGroupIncome, updateGroupIncome, deleteGroupIncome } = require('../controllers/Group-income');
 const { getGroupExpense } = require('../controllers/Group-expense');
 const { addDescription,getDescriptions,deleteDescription, updateDescription} = require('../controllers/Note');
-const { addTrip, addTripMember, addTripData,getTrip, deleteTripData, updateTripData, getTripData } = require('../controllers/Trip');
+const { addTrip, addTripMember, addTripData,getTrip, deleteTripData, updateTripData, getTripData,deleteTripGroup } = require('../controllers/Trip');
 const router = require('express').Router();
 
 
@@ -41,7 +41,8 @@ router.post('/add-group',addGroup)
     .post('/update-TripData',updateTripData)
     .get('/get-TripData/:id',getTripData)
     .post('/add-UserImage',addUserImage)
-    .post('/add-UserName',addUserName);
+    .post('/add-UserName',addUserName)
+    .post('/delete-TripGroup',deleteTripGroup)
     
 
 

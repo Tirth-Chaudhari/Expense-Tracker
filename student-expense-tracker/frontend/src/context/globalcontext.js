@@ -6,7 +6,7 @@ const GlobalContext=React.createContext();
 
 
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+const BASE_URL = process.env.REACT_APP_BASE_URL
 
 export const GlobalProvider=({children})=>
 {
@@ -28,6 +28,21 @@ export const GlobalProvider=({children})=>
     let name='';
     let email1='';
     const [Members,setMember]=useState([]);
+
+    const DeleteTripGroup=async (id)=>{
+            const data={
+                id:id
+            }
+        await axios.post(`${BASE_URL}delete-TripGroup`,data).then((response)=>
+        {
+              
+               
+               
+        })
+        .catch((err) =>{
+                setError(err.response.data.message)
+        })
+    }
 
     const getTripData=async(id)=>
     {   
@@ -683,7 +698,7 @@ export const GlobalProvider=({children})=>
                                         addUser,userid,setUserImage,setUserProfileName,setUserImage,setUserName,
                                         addMember,Members,getMember,addGroupIncome,getGroupIncome,getGroupExpense,GroupIncome,GroupExpense,updateGroupData,deleteGroupData,deleteMember,
                                         addNote,getNote,deleteNote,updateNote,Note,
-                                        AddTrip,getTrip,Trip,AddTripMember,addTripData,deleteTripData,updateTripData,getTripData,TripInfo
+                                        AddTrip,getTrip,Trip,AddTripMember,addTripData,deleteTripData,updateTripData,getTripData,TripInfo,DeleteTripGroup
                                         }}>
             {children}
         </GlobalContext.Provider>

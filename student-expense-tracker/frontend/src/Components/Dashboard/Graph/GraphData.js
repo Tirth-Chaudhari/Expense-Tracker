@@ -147,7 +147,7 @@ const GraphData = () => {
                 <div className='text-xl m-2'>Add Category to View Details</div>}
             </div>
             <div className='w-full'>
-                {pieChartData.length !=0 && <h3 className='flex justify-center'>Select a category to view details:</h3>}
+                {pieChartData.length !=0 && <h3 className='flex justify-center'>Click category to view details:</h3>}
         <div className="category-chart ">
          {pieChartData.map((entry, index) => {
         const percentage = ((entry.value / totalIncomeExpense) * 100).toFixed(2);

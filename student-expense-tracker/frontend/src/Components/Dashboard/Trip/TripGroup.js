@@ -2,7 +2,7 @@ import React, { Component, useEffect,useRef,useState } from 'react';
 import { IoReturnDownBackSharp } from "react-icons/io5";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Delete, comment, edit, email, friends, note, rupee, user } from "../../../utils/Icon";
+import { Delete, comment, edit, email, friends, note, rupee, trash, user } from "../../../utils/Icon";
 import { useGlobalContext } from "../../../context/globalcontext";
 import { Card, Checkbox, Typography, timeline } from "@material-tailwind/react";
 import moment from "moment";
@@ -18,14 +18,37 @@ const TripsGroup=({TripId,setActive})=>
                         const [dialogColor,setColor]=useState('');
                         const [isDisabled,setDisabled]=useState('');
                         const [_id,setid]=useState('');
-                        const {deleteTripData,updateTripData,getTripData,TripInfo}=useGlobalContext();
+                        const {deleteTripData,updateTripData,getTripData,TripInfo,DeleteTripGroup}=useGlobalContext();
                         const [allsettlements,setsettlements]=useState();
                         const [mode,setMode]=useState("Equally");
                         const [checkedCount, setCheckedCount] = useState(TripId.TripMember.length);
                         const [total,setTotal]=useState(0);
                         const [equallyTitle,setTitle]=useState('');
                         const [selectedMembers, setSelectedMembers] = useState(Array.from({ length: TripId.TripMember.length }, () => true));
+                        const [isDialogOpenDelete,setDialogOpenDelete]=useState(false);
+                       
 
+                        const onCloseDelete=()=>
+                        {
+                           setDialogOpenDelete(!isDialogOpenDelete);
+                        }
+                        const onDeleteGroup=()=>
+                        {
+                              DeleteTripGroup(TripId._id);
+                              setActive(3);
+                        }
+                        const handleDeleteGroup=()=>
+                        {
+                            if(localStorage.getItem("userid")===TripId.CreateBy.user_id)
+                            {
+                               setDialogOpenDelete(!isDialogOpenDelete);
+                            }
+                            else{
+                              toast.info("Only Group Admin can Delete This Group", {
+                                 position: "top-center"
+                               });
+                            }
+                        }
                      const handleCheckboxChange = (index, isChecked) => {
                         const newCheckedCount = isChecked ? checkedCount + 1 : checkedCount - 1;
                         setCheckedCount(newCheckedCount);
@@ -319,7 +342,7 @@ return(<>
          onChange={handleSelectionChange}
          >
          <option value="GroupData">Group Expense</option>
-         <option value="GroupMembers">Group Members</option>
+         <option value="GroupMembers">Group Settings</option>
          <option value="Add Expense">Add Expense</option>
          <option value="Bill Splitter">Bill Splitter</option>
       </select>
@@ -466,6 +489,7 @@ return(<>
 ) : null}
 {current==='GroupMembers' ?
 (
+
 <div className=''>
    <div>
       <div class='max-w-md w-full mx-auto bg-white rounded-lg shadow-md overflow-hidden mt-4'>
@@ -492,6 +516,79 @@ return(<>
          </div>
       </div>
       ))}
+   </div>
+   <div>
+            <p className='text-lg justify-center flex mt-8'>Danger Zone</p>
+           <div className='mb-8 flex justify-center text-red-400' onClick={handleDeleteGroup}> <button className='mr-2'>{trash}</button> Delete group </div>
+
+
+
+
+
+
+           {isDialogOpenDelete  && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+          <div className="relative w-full max-w-md mx-auto my-6">
+            <div className="relative flex flex-col w-full rounded-lg shadow-lg outline-none focus:outline-none bg-red-300">
+              <div className="flex items-start justify-between p-3 border-b border-solid rounded-t border-blueGray-200">
+                <h3 className="text-xl font-semibold">
+                     Are you ABSOLUTELY sure you want to delete this group? This will remove this group for All users involved,not just yourself.
+                </h3>
+                <button
+                  className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                  onClick={onCloseDelete}
+                >
+                  <span className="text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
+                    ×
+                  </span>
+                </button>
+              </div>
+              {/* Body */}
+              <div className="relative p-4 flex justify-around">
+                
+                <button
+                  className="text-white bg-blue-500 font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 rounded-2xl hover:bg-opacity-10"
+                  type="button"
+                  onClick={onDeleteGroup}
+                >
+                    Yes
+                </button>
+                <button
+                  className="text-white bg-blue-500 font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 rounded-2xl hover:bg-opacity-10"
+                  type="button"
+                  onClick={onCloseDelete}
+                >
+                  No
+                </button>
+                {/* </p> */}
+              </div>
+              {/* Footer */}
+              <div className="flex items-center justify-end p-2 border-t border-solid rounded-b border-blueGray-200">
+                <button
+                  className="text-white bg-red-500 font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 rounded-2xl"
+                  type="button"
+                  onClick={onCloseDelete}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+       )}
+
+
+
+
+
+
+
+
+
+
+
+
+
    </div>
 </div>
 ):null
