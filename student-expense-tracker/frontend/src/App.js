@@ -25,6 +25,10 @@ const App=()=>
         setIsSidebarOpen(!isSidebarOpen);
         
     }   
+     const handleToggleSidebar = () => {
+      setIsSidebarOpen(!isSidebarOpen);
+      isSidebarOpenFunc();
+    };
     useEffect(()=>
     {
         getIncomes();
@@ -60,9 +64,9 @@ const App=()=>
           {/* {orbMemo} */}
            <MainLayout bg={bg} >
           
-            <Navigation active={active} setActive={setActive} isSidebarOpenFunc={isSidebarOpenFunc}/>
+            <Navigation active={active} setActive={setActive} isSidebarOpenFunc={isSidebarOpenFunc} isSidebarOpen={isSidebarOpen} handleToggleSidebar={handleToggleSidebar}/>
                  
-            <main>  
+            <main onClick={handleToggleSidebar}>  
                 <div className='logo1 mb-6 flex flex-col items-center z-10 sticky top-0  justify-center rounded-2xl h-32 shadow-md'>
                     <div><h3 className='font-bold'>My Money</h3></div>
                     {active==2 ? <TabLayout setActive={setActiveTab}

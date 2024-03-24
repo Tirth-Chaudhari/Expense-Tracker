@@ -10,14 +10,14 @@ import { useGlobalContext } from "../context/globalcontext";
 import { Upload_Preset } from "../config/CloudConfig";
 import { Cloudinary_Name } from "../config/CloudConfig";
 
-const Nav = ({active,setActive,isSidebarOpenFunc})=>
+const Nav = ({active,setActive,isSidebarOpenFunc,handleToggleSidebar,isSidebarOpen})=>
 {
-    const [isSidebarOpen,setIsSidebarOpen]=useState(false);
+    // const [isSidebarOpen,setIsSidebarOpen]=useState(false);
 
-    const handleToggleSidebar = () => {
-      setIsSidebarOpen(!isSidebarOpen);
-      isSidebarOpenFunc();
-    };
+    // const handleToggleSidebar = () => {
+    //   setIsSidebarOpen(!isSidebarOpen);
+    //   isSidebarOpenFunc();
+    // };
 
     const [profileImage, setProfileImage] = useState(localStorage.getItem("photoImage")); // Default image path
     const [userName, setUserName] = useState(localStorage.getItem("name"));
