@@ -22,13 +22,23 @@ const App=()=>
     const [isSidebarOpen,setIsSidebarOpen]=useState(false)
     const isSidebarOpenFunc=()=>
     {
+      
         setIsSidebarOpen(!isSidebarOpen);
+      
         
     }   
      const handleToggleSidebar = () => {
+     
       setIsSidebarOpen(!isSidebarOpen);
       isSidebarOpenFunc();
     };
+    const handleMainToggleSidebar=()=>
+    {
+      if(isSidebarOpen)
+      {
+        setIsSidebarOpen(false);
+      }
+    }
     useEffect(()=>
     {
         getIncomes();
@@ -66,7 +76,7 @@ const App=()=>
           
             <Navigation active={active} setActive={setActive} isSidebarOpenFunc={isSidebarOpenFunc} isSidebarOpen={isSidebarOpen} handleToggleSidebar={handleToggleSidebar}/>
                  
-            <main onClick={handleToggleSidebar}>  
+            <main onClick={handleMainToggleSidebar}>  
                 <div className='logo1 mb-6 flex flex-col items-center z-10 sticky top-0  justify-center rounded-2xl h-32 shadow-md'>
                     <div><h3 className='font-bold'>My Money</h3></div>
                     {active==2 ? <TabLayout setActive={setActiveTab}
