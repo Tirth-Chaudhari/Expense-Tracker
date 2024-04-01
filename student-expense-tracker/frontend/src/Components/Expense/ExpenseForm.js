@@ -35,7 +35,7 @@ const ExpenseForm=()=>
         category:'',
         description:'' ,
        });
-       toast.success("SuccessFully Added Income", {
+       toast.success("SuccessFully Added Expense", {
         position: "top-center"
       });
     }
